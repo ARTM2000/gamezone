@@ -1,0 +1,12 @@
+.Main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    background-color: #f3eded;
+    text-align: center;
+
+}
