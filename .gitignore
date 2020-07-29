@@ -3,7 +3,7 @@
 # dependencies
 node_modules
 sample
-./util/constants.js
+constants.js
 ./client/node_modules
 ./client/.pnp
 ./client/.pnp.js
@@ -21,7 +21,7 @@ sample
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
 node_modules
