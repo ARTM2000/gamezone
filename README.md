@@ -1,4 +1,4 @@
 # GameZone
-a central game center for online playing some simple games 😉
+a game center for online playing some simple games with your friends 😉
 
 **under_developing** :)
