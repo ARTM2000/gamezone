@@ -3,6 +3,7 @@
 # dependencies
 node_modules
 sample
+./util/constants.js
 ./client/node_modules
 ./client/.pnp
 ./client/.pnp.js
