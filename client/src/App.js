@@ -17,7 +17,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    
+    // console.log("socket: ", socket)
     console.log("socket set")
     socket.on("hi", data => {
       console.log(data.msg)

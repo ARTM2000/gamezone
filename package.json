@@ -1,8 +1,8 @@
 {
-  "name": "tic-tac-toa",
+  "name": "game-zone",
   "version": "1.0.0",
-  "description": "online tic-tac-toa game",
-  "main": "app.js",
+  "description": "online gameZone for playing online simple games with others",
+  "main": "server.js",
   "scripts": {
     "client": "npm start --prefix client",
     "server": "nodemon server.js",
@@ -11,6 +11,7 @@
   "author": "alireza tanoomandian",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
     "express": "^4.17.1",
