@@ -34,6 +34,22 @@ router.post(
   ],
   userController.onNewUser
 );
-router.post("/login", () => {});
+router.post("/login", [
+  body("email")
+    .notEmpty()
+    .withMessage("Email should not be empty")
+    .bail()
+    .isEmail()
+    .withMessage("Email is not in correct format"),
+  body("pass")
+    .notEmpty()
+    .withMessage("Password should not be empty")
+    .bail()
+    .isLength({min: 5})
+    .withMessage("Password is not long enough")
+    .bail()
+    .isAlphanumeric()
+    .withMessage("Password should contain numbers and alphabets")
+], userController.onLogin);
 
 module.exports = router;
