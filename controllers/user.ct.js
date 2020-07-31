@@ -85,6 +85,7 @@ exports.onLogin = async (req, res, next) => {
 
         const response = {
           token: authToken,
+          username: user.username,
           valid: true
         };
 

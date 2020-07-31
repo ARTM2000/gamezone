@@ -4,4 +4,5 @@ const dbName = process.env.DB_NAME || "databaseName";
 
 module.exports = {
   db: `mongodb+srv://${dbUser}:${dbPassword}@cluster0-k82f8.mongodb.net/${dbName}?retryWrites=true&w=majority`,
+  jwtSecret: "your jsonWebToken secret key",
 };

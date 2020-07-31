@@ -1,20 +1,41 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const constants = require("./util/constant");
 //you have to create a constant.js file like
 //the sample before running the project
 const socketIO = require("./socket");
 
-//v1.api routes
-const routesV1 = require("./routes/api.rt");
+//v1.auth routes
+const routesV1 = require("./routes/authV1.rt");
 
 const app = express();
 app.use(bodyParser.json());
 
-app.use("/v1/api", routesV1);
-app.get("/", (req, res, next) => res.send("hello"));
+app.get("/*", (req, res, next) =>
+  res.send("<h3 style='text-align: center;'>Hello, welcome to this project</h3>")
+);
+app.use("/v1/auth", routesV1);
+app.use((req, res, next) => {
+  const authToken = req.header["Authentication"];
+  if (authToken) {
+    const token = authToken.split(" ")[1];
+    const information = jwt.verify(token, constants.jwtSecret);
+    
+    if (information) {
+      req.userInformation = information;
+      next();
+    } else {
+      const error = { status: 403, msg: "Your token is out of date" };
+      next(error);
+    }
+  } else {
+    const error = {status: 403, msg: "Not authorized"};
+    next(error);
+  }
+})
 
 app.use((err, req, res, next) => {
   res.json(err);
