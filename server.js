@@ -7,10 +7,18 @@ const constants = require("./util/constant");
 //the sample before running the project
 const socketIO = require("./socket");
 
+//v1.api routes
+const routesV1 = require("./routes/api.rt");
+
 const app = express();
 app.use(bodyParser.json());
 
+app.use("/v1/api", routesV1);
 app.get("/", (req, res, next) => res.send("hello"));
+
+app.use((err, req, res, next) => {
+  res.json(err);
+})
 
 const PORT = process.env.PORT || 5000;
 

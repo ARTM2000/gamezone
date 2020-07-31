@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const gameRoom = new Schema({
   game: {
     type: String,
-    required: true,
+    required: false,
   },
   roomId: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
