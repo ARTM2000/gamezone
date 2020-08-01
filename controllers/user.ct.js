@@ -25,6 +25,17 @@ const errorPusher = (req) => {
   return errors;
 };
 
+const genUserGameId = (userId) => {
+  let firstPart = new Date().getTime();
+  firstPart = firstPart % 100000000;
+  const secondPart = userId.toString().slice(0, 9);
+  const thirdPart = Math.floor(Math.random()*1000);
+
+  const gameId = `gi${firstPart}${secondPart}${thirdPart}`;
+
+  return gameId;
+}
+
 exports.onNewUser = async (req, res, next) => {
   // validating inputs
   const errors = errorPusher(req);
@@ -76,6 +87,10 @@ exports.onLogin = async (req, res, next) => {
         const error = { status: 403, msg: "The password is not correct" };
         next(error);
       } else {
+        //creating a gameID
+        user.gameID = genUserGameId(user._id);
+        await user.save()
+
         //creating the authToken
         const authToken = jwt.sign(
           { userId: user._id, email: user.email },
@@ -86,6 +101,7 @@ exports.onLogin = async (req, res, next) => {
         const response = {
           token: authToken,
           username: user.username,
+          id: user._id,
           valid: true
         };
 

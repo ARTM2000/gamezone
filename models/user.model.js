@@ -30,7 +30,7 @@ const user = new Schema(
     gameRooms: [gameRoom],
     gameID: {
       type: String,
-      required: true,
+      required: false,
     }
   },
   { timestamps: true }

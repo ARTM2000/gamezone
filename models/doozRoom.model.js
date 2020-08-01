@@ -12,15 +12,15 @@ const user = new Schema({
 const act = new Schema({
   userId: {
     type: String,
-    required: true,
+    required: false,
   },
   row: {
     type: Number,
-    required: true,
+    required: false,
   },
   col: {
     type: Number,
-    required: true,
+    required: false,
   },
 });
 

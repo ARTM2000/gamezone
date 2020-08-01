@@ -28,9 +28,6 @@ router.post(
       .bail()
       .isLength({min: 5})
       .withMessage("Password is not long enough")
-      .bail()
-      .isAlphanumeric()
-      .withMessage("Password should contain numbers and alphabets"),
   ],
   userController.onNewUser
 );
@@ -47,9 +44,6 @@ router.post("/login", [
     .bail()
     .isLength({min: 5})
     .withMessage("Password is not long enough")
-    .bail()
-    .isAlphanumeric()
-    .withMessage("Password should contain numbers and alphabets")
 ], userController.onLogin);
 
 module.exports = router;
