@@ -1,0 +1,27 @@
+.button,
+.impButton,
+.lowButton {
+    padding: 10px 15px;
+    margin: 5px 1.4%;
+    border: 2px solid;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.impButton {
+    background-color: #ff7b00;
+    border-color: transparent;
+    color: white;
+}
+
+.button {
+    background-color: transparent;
+    border-color: #ff7b00;
+    color: #ff7b00;
+}
+
+.lowButton {
+    background-color: transparent;
+    border-color: transparent;
+    color: #ff7b00;
+}

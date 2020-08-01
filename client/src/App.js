@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import openSocket from "socket.io-client";
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -7,6 +6,7 @@ import socket from "./socket.config";
 
 import Layout from "./components/layout/layout";
 import DoozGame from "./containers/DoozGame/DoozGame";
+import Login from "./containers/Login/Login";
 import "./App.css";
 
 import actionTypes from "./Store/actions/basic";
@@ -29,6 +29,7 @@ class App extends Component {
       <Layout>
         <Switch>
           <Route exact path="/dooz" component={DoozGame} />
+          <Route exact path="/" component={Login} />
         </Switch>
       </Layout>
     );
@@ -36,11 +37,11 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  socket: state.socket
+  // socket: state.socket
 })
 
 const mapDispatchToProps = dispatch => ({
-  setSocket: (socket) => dispatch({type: actionTypes.SET_SOCKET, socket: socket})
+  // setSocket: (socket) => dispatch({type: actionTypes.SET_SOCKET, socket: socket})
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

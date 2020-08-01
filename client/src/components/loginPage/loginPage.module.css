@@ -1,0 +1,11 @@
+.container {
+    width: 90%;
+    max-width: 340px;
+    height: auto;
+    background-color: #f3f3f3;
+    border: transparent;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px #00000010;
+    padding: 10px 15px;
+    margin: 10vh auto;
+}
