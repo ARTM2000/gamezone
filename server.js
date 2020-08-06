@@ -54,7 +54,11 @@ app.use((req, res, next) => {
 // }));
 
 app.use((err, req, res, next) => {
-  res.json(err);
+  const errorFormat = {
+    errors: err,
+    valid: false,
+  }
+  res.json(errorFormat);
 });
 
 const PORT = process.env.PORT || 5000;

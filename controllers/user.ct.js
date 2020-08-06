@@ -110,3 +110,29 @@ exports.onLogin = async (req, res, next) => {
     }
   }
 };
+
+exports.onVerify = (req, res, next) => {
+  // For verifying jwt whenever it needs
+  const { token } = req.body;
+  const errors = errorPusher(req);
+  if(errors.length > 0) {
+    next(errors);
+  } else {
+    const information = jwt.verify(token, constants.jwtSecret);
+    if(!information) {
+      // In case that token expired
+      const response = {
+        valid: false,
+        status: 403,
+      };
+      res.json(response);
+    } else {
+      // Validation succeeds
+      const response = {
+        valid: true,
+        status: 200,
+      }
+      res.json(response)
+    }
+  }
+}
