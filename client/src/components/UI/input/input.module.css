@@ -7,3 +7,10 @@
     border-radius: 20px;
     outline: none;
 }
+
+.error {
+    margin: 3px auto 3px 10px;
+    font-size: 13px;
+    text-align: left;
+    color: red;
+}

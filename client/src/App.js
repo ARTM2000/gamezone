@@ -28,7 +28,7 @@ class App extends Component {
       .then((data) => {
         console.log("on check");
         this.props.setValidToken(data.valid);
-        console.log(this.props.validToken);
+        // console.log(this.props.validToken);
       })
       .catch((err) => console.log(err));
 

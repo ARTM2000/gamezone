@@ -58,7 +58,7 @@ exports.onNewUser = async (req, res, next) => {
 
       const thisNewUser = await newUser.save();
       if (thisNewUser) {
-        res.json({ email, msg: "User generated" });
+        res.json({ email, msg: "User generated", valid: true });
       } else {
         //in case of fault in saving user into db
         const error = { status: 500, msg: "Some problem in creating user" };

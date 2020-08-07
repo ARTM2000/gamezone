@@ -1,21 +1,28 @@
 import React from "react";
 
-import StyleSheet from "./loginPage.module.css";
+import StyleSheet from "./newUserPage.module.css";
 import Wrapper from "../UI/wrapper/wrapper";
 import Input from "../UI/input/input";
 import Button from "../UI/button/button";
 
-const loginPage = (props) => {
+const newUserPage = (props) => {
   return (
     <Wrapper>
       <div className={StyleSheet.container}>
-        <h2>Welcome to GameZone</h2>
+        <h2>Create account and enjoy games</h2>
+        <Input
+          type="text"
+          placeholder="Username"
+          value={props.username}
+          onChange={props.setUsernameFunction}
+          autoFocus={true}
+          error={props.errors.username}
+        />
         <Input
           type="text"
           placeholder="Email"
           value={props.email}
           onChange={props.setEmailFunction}
-          autoFocus={true}
           error={props.errors.email}
         />
         <Input
@@ -26,14 +33,19 @@ const loginPage = (props) => {
           error={props.errors.pass}
         />
         <div className={StyleSheet.controller}>
-          <Button mode="imp" width="47.1%" onClick={props.userLoginFunction}>
-            Sign in
+          <Button mode="imp" width="47.1%" onClick={props.createUserFunction}>
+            Create account
           </Button>
-          <Button width="47.1%" onClick={() => props.changeModeFunction("newUser")}>Sign up</Button>
+          <Button
+            width="47.1%"
+            onClick={() => props.changeModeFunction("login")}
+          >
+            Have an account?
+          </Button>
         </div>
       </div>
     </Wrapper>
   );
 };
 
-export default loginPage;
+export default newUserPage;
