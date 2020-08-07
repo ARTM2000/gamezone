@@ -51,7 +51,7 @@ class Login extends Component {
     const emailPattern = /[a-zA-Z0-9]{2,}@[a-zA-Z]{2,}.[a-z]{2,5}/gi;
 
     //username validation
-    if (username && username.length <= 2) {
+    if (username !== undefined && username.length <= 2) {
       errorsCount++;
       errors.username.push({ msg: `${username.length > 0 ? username: "Username"} is not long enough` });
     }

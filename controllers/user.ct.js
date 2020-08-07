@@ -29,12 +29,12 @@ const genUserGameId = (userId) => {
   let firstPart = new Date().getTime();
   firstPart = firstPart % 100000000;
   const secondPart = userId.toString().slice(0, 9);
-  const thirdPart = Math.floor(Math.random()*1000);
+  const thirdPart = Math.floor(Math.random() * 1000);
 
   const gameId = `gi${firstPart}${secondPart}${thirdPart}`;
 
   return gameId;
-}
+};
 
 exports.onNewUser = async (req, res, next) => {
   // validating inputs
@@ -89,11 +89,11 @@ exports.onLogin = async (req, res, next) => {
       } else {
         //creating a gameID
         user.gameID = genUserGameId(user._id);
-        await user.save()
+        await user.save();
 
         //creating the authToken
         const authToken = jwt.sign(
-          { userId: user._id, email: user.email },
+          { userId: user._id, email: user.email, username: user.username },
           constants.jwtSecret,
           { expiresIn: "6 days" }
         );
@@ -103,7 +103,7 @@ exports.onLogin = async (req, res, next) => {
           username: user.username,
           email: user.email,
           id: user._id,
-          valid: true
+          valid: true,
         };
 
         res.json(response);
@@ -116,11 +116,11 @@ exports.onVerify = (req, res, next) => {
   // For verifying jwt whenever it needs
   const { token } = req.body;
   const errors = errorPusher(req);
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     next(errors);
   } else {
     const information = jwt.verify(token, constants.jwtSecret);
-    if(!information) {
+    if (!information) {
       // In case that token expired
       const response = {
         valid: false,
@@ -132,9 +132,11 @@ exports.onVerify = (req, res, next) => {
       const response = {
         valid: true,
         status: 200,
-        userId: information.userId
-      }
-      res.json(response)
+        id: information.userId,
+        username: information.username,
+        email: information.email
+      };
+      res.json(response);
     }
   }
-}
+};

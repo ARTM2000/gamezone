@@ -10,7 +10,7 @@ import DoozGame from "./containers/DoozGame/DoozGame";
 import Login from "./containers/Login/Login";
 import "./App.css";
 
-import actionTypes from "./Store/actions/basic";
+import actionType from "./Store/actions/basic";
 
 class App extends Component {
   state = {
@@ -29,6 +29,9 @@ class App extends Component {
         console.log("on check");
         this.props.setValidToken(data.valid);
         // console.log(this.props.validToken);
+        if (data.valid) {
+          this.props.onSetUser(data.id, data.username, data.email)
+        }
       })
       .catch((err) => console.log(err));
 
@@ -67,7 +70,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setValidToken: (value) =>
-    dispatch({ type: actionTypes.SET_VALID_TOKEN, value: value }),
+    dispatch({ type: actionType.SET_VALID_TOKEN, value: value }),
+  onSetUser: (userId, username, email) =>
+    dispatch({
+      type: actionType.SET_USER,
+      userId: userId,
+      username: username,
+      email: email,
+    }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
