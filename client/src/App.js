@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import axios from "axios";
 
 import socket from "./socket.config";
 
@@ -13,35 +14,60 @@ import actionTypes from "./Store/actions/basic";
 
 class App extends Component {
   state = {
-
+    
   };
 
   componentDidMount() {
-    // console.log("socket: ", socket)
-    console.log("socket set")
-    socket.on("hi", data => {
-      console.log(data.msg)
-    })
+    this.setState({ validToken: this.props.validToken });
+    const token = localStorage.getItem("token");
+    axios
+      .post("/v1/auth/verify", {
+        token,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        console.log("on check");
+        this.props.setValidToken(data.valid);
+        console.log(this.props.validToken);
+      })
+      .catch((err) => console.log(err));
+
+    console.log("socket set");
+    socket.on("hi", (data) => {
+      console.log(data.msg);
+    });
   }
 
   render() {
     return (
       <Layout>
         <Switch>
-          <Route exact path="/dooz" component={DoozGame} />
-          <Route exact path="/" component={Login} />
+          {!this.props.validToken || this.props.validToken === null ? (
+            <>
+            {/* in case that user did not authenticated */}
+              <Redirect to="/auth" />
+              <Route exact path="/auth" component={Login} />
+            </>
+          ) : (
+            <>
+            {/* in case that user authenticated */}
+              <Redirect to="/dashboard"/>
+              <Route exact path="/dooz" component={DoozGame} />
+            </>
+          )}
         </Switch>
       </Layout>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  // socket: state.socket
-})
+const mapStateToProps = (state) => ({
+  validToken: state.validToken,
+});
 
-const mapDispatchToProps = dispatch => ({
-  // setSocket: (socket) => dispatch({type: actionTypes.SET_SOCKET, socket: socket})
-})
+const mapDispatchToProps = (dispatch) => ({
+  setValidToken: (value) =>
+    dispatch({ type: actionTypes.SET_VALID_TOKEN, value: value }),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

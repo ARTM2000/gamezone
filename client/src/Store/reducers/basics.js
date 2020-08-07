@@ -1,18 +1,31 @@
 import actionType from "../actions/basic";
 
 const initialState = {
-    socket: {
-        on:() => {}
-    },
+   user: {
+       userId: "",
+       username: "",
+       email: "",
+   },
+   validToken: true,
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case actionType.SET_SOCKET : 
+        case actionType.SET_USER : 
             return {
                 ...state,
-                socket: action.socket
+                user: {
+                    userId: action.userId,
+                    username: action.username,
+                    email: action.email
+                }
             };
+        
+        case actionType.SET_VALID_TOKEN : 
+            return {
+                ...state,
+                validToken: action.value
+            }
 
         default:
             return state;

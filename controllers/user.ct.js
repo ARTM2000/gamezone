@@ -101,6 +101,7 @@ exports.onLogin = async (req, res, next) => {
         const response = {
           token: authToken,
           username: user.username,
+          email: user.email,
           id: user._id,
           valid: true
         };
@@ -131,6 +132,7 @@ exports.onVerify = (req, res, next) => {
       const response = {
         valid: true,
         status: 200,
+        userId: information.userId
       }
       res.json(response)
     }

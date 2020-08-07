@@ -1,1 +1,2 @@
-exports.SET_SOCKET = "SET_SOCKET";
+exports.SET_USER = "SET_USER";
+exports.SET_VALID_TOKEN = "VALID_TOKEN";
