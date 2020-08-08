@@ -4,6 +4,7 @@ import StyleSheet from "./loginPage.module.css";
 import Wrapper from "../UI/wrapper/wrapper";
 import Input from "../UI/input/input";
 import Button from "../UI/button/button";
+import MiniLoading from "../UI/miniLoading/miniLoading";
 
 const loginPage = (props) => {
   return (
@@ -27,7 +28,7 @@ const loginPage = (props) => {
         />
         <div className={StyleSheet.controller}>
           <Button mode="imp" width="47.1%" onClick={props.userLoginFunction}>
-            Sign in
+            {props.loading ? <MiniLoading /> : "Sign in"}
           </Button>
           <Button width="47.1%" onClick={() => props.changeModeFunction("newUser")}>Sign up</Button>
         </div>

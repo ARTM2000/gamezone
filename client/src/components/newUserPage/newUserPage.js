@@ -4,6 +4,7 @@ import StyleSheet from "./newUserPage.module.css";
 import Wrapper from "../UI/wrapper/wrapper";
 import Input from "../UI/input/input";
 import Button from "../UI/button/button";
+import MiniLoading from "../UI/miniLoading/miniLoading";
 
 const newUserPage = (props) => {
   return (
@@ -34,7 +35,7 @@ const newUserPage = (props) => {
         />
         <div className={StyleSheet.controller}>
           <Button mode="imp" width="47.1%" onClick={props.createUserFunction}>
-            Create account
+            {props.loading? <MiniLoading /> : "Create account"}
           </Button>
           <Button
             width="47.1%"

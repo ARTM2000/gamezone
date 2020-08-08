@@ -14,7 +14,7 @@ class Login extends Component {
     email: "",
     pass: "",
     loading: false,
-    mode: "newUser",
+    mode: "login",
     authErrors: {
       email: [],
       pass: [],
@@ -113,6 +113,7 @@ class Login extends Component {
     const hasError = this.inputValidation(username, email, pass)
 
     if (hasError === 0) {
+      this.setState({loading: true})
       console.log("on create");
       axios
         .post("/v1/auth/new-user", {
@@ -127,10 +128,14 @@ class Login extends Component {
             this.onChangeMode("login");
             this.setState({ email: data.email });
           } else {
-            console.log(data);
+            // console.log(data);
           }
+          this.setState({loading: false})
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          this.setState({loading: false})
+        });
     }
   };
 
@@ -146,6 +151,7 @@ class Login extends Component {
             errors={this.state.authErrors}
             email={this.state.email}
             pass={this.state.pass}
+            loading={this.state.loading}
           />
         ) : (
           <NewUserPage
@@ -160,6 +166,7 @@ class Login extends Component {
             username={this.state.username}
             email={this.state.email}
             pass={this.state.pass}
+            loading={this.state.loading}
           />
         )}
       </>
