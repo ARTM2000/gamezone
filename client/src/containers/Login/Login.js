@@ -20,6 +20,8 @@ class Login extends Component {
       pass: [],
       username: [],
     },
+    cancelToken: null,
+    serverSideErrors: [],
   };
 
   onChangeMode = (mode) => {
@@ -36,12 +38,17 @@ class Login extends Component {
       default:
         authMode = "login";
     }
+    if (this.state.cancelToken !== null) {
+      this.state.cancelToken();
+    }
     this.setState({
       username: "",
       email: "",
       pass: "",
       mode: authMode,
       authErrors: { email: [], pass: [], username: [] },
+      loading: false,
+      serverSideErrors: [],
     });
   };
 
@@ -53,7 +60,11 @@ class Login extends Component {
     //username validation
     if (username !== undefined && username.length <= 2) {
       errorsCount++;
-      errors.username.push({ msg: `${username.length > 0 ? username: "Username"} is not long enough` });
+      errors.username.push({
+        msg: `${
+          username.length > 0 ? username : "Username"
+        } is not long enough`,
+      });
     }
 
     //email validation
@@ -76,67 +87,122 @@ class Login extends Component {
   };
 
   onUserLogin = () => {
-    const email = this.state.email;
-    const pass = this.state.pass;
-    const hasError = this.inputValidation(undefined, email, pass);
+    this.setState({
+      authErrors: { email: [], pass: [], username: [] },
+    }, () => {
+      const email = this.state.email;
+      const pass = this.state.pass;
+      const hasError = this.inputValidation(undefined, email, pass);
 
-    if (hasError === 0) {
-      this.setState({ loading: true });
-      axios
-        .post("/v1/auth/login", {
-          email,
-          pass,
-        })
-        .then((res) => res.data)
-        .then((data) => {
-          //   console.log(data);
-          this.props.onSetValidToken(data.valid);
-          if (data.valid) {
-            const { id, username, email, token } = data;
-            this.props.onSetUser(id, username, email);
-            localStorage.setItem("token", token);
-            this.setState({ email: "", pass: "" });
-          }
-          this.setState({ loading: false });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({ loading: false });
+      if (hasError === 0) {
+        this.setState({
+          loading: true,
+          serverSideErrors: [],
         });
-    }
+        const CancelToken = axios.CancelToken;
+        axios
+          .post(
+            "/v1/auth/login",
+            {
+              email,
+              pass,
+            },
+            {
+              cancelToken: new CancelToken((c) =>
+                this.setState({ cancelToken: c })
+              ),
+            }
+          )
+          .then((res) => res.data)
+          .then((data) => {
+            //   console.log(data);
+            this.props.onSetValidToken(data.valid);
+            if (data.valid) {
+              const { id, username, email, token } = data;
+              this.props.onSetUser(id, username, email);
+              localStorage.setItem("token", token);
+              this.setState({ email: "", pass: "", username: "" });
+            } else {
+              console.log(data);
+              if (data.errors.length) {
+                const serverErrors = [];
+                data.errors.forEach((el) => {
+                  serverErrors.push(el.msg);
+                });
+                this.setState({ serverSideErrors: serverErrors });
+              } else {
+                this.setState({ serverSideErrors: [data.errors.msg] });
+              }
+            }
+            this.setState({ loading: false });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.setState({ loading: false });
+          });
+      }
+    });
+    
   };
 
   onNewUserCreation = () => {
-    const username = this.state.username;
-    const email = this.state.email;
-    const pass = this.state.pass;
-    const hasError = this.inputValidation(username, email, pass)
+    this.setState({
+      authErrors: { email: [], pass: [], username: [] },
+    }, () => {
+      const username = this.state.username;
+      const email = this.state.email;
+      const pass = this.state.pass;
+      const hasError = this.inputValidation(username, email, pass);
 
-    if (hasError === 0) {
-      this.setState({loading: true})
-      console.log("on create");
-      axios
-        .post("/v1/auth/new-user", {
-          username,
-          email,
-          pass,
-        })
-        .then((res) => res.data)
-        .then((data) => {
-          if (data.valid) {
-            console.log("created");
-            this.onChangeMode("login");
-            this.setState({ email: data.email });
-          } else {
-            // console.log(data);
-          }
-          this.setState({loading: false})
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({loading: false})
+      if (hasError === 0) {
+        this.setState({
+          loading: true,
+          serverSideErrors: [],
         });
-    }
+        const CancelToken = axios.CancelToken;
+
+        console.log("on create");
+        axios
+          .post(
+            "/v1/auth/new-user",
+            {
+              username,
+              email,
+              pass,
+            },
+            {
+              cancelToken: new CancelToken((c) =>
+                this.setState({ cancelToken: c })
+              ),
+            }
+          )
+          .then((res) => res.data)
+          .then((data) => {
+            if (data.valid) {
+              console.log("created");
+              this.onChangeMode("login");
+              this.setState({ email: data.email });
+            } else {
+              console.log(data);
+              if (data.errors.length) {
+                const serverErrors = [];
+                data.errors.forEach((el) => {
+                  serverErrors.push(el.msg);
+                });
+                this.setState({ serverSideErrors: serverErrors });
+              } else {
+                this.setState({ serverSideErrors: [data.errors.msg] });
+              }
+            }
+            this.setState({ loading: false });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.setState({ loading: false });
+          });
+      }
+    });
+    
   };
 
   render() {
@@ -149,6 +215,7 @@ class Login extends Component {
             setPassFunction={(e) => this.setState({ pass: e.target.value })}
             changeModeFunction={this.onChangeMode}
             errors={this.state.authErrors}
+            serverErrors={this.state.serverSideErrors}
             email={this.state.email}
             pass={this.state.pass}
             loading={this.state.loading}
@@ -163,6 +230,7 @@ class Login extends Component {
             setPassFunction={(e) => this.setState({ pass: e.target.value })}
             changeModeFunction={this.onChangeMode}
             errors={this.state.authErrors}
+            serverErrors={this.state.serverSideErrors}
             username={this.state.username}
             email={this.state.email}
             pass={this.state.pass}
@@ -188,4 +256,4 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch({ type: actionType.SET_VALID_TOKEN, value: value }),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

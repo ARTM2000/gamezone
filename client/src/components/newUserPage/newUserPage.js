@@ -33,9 +33,20 @@ const newUserPage = (props) => {
           onChange={props.setPassFunction}
           error={props.errors.pass}
         />
+        {props.serverErrors.length > 0
+          ? props.serverErrors.map((el, index) => (
+              <p key={index} className={StyleSheet.error}>
+                {el}
+              </p>
+            ))
+          : null}
         <div className={StyleSheet.controller}>
-          <Button mode="imp" width="47.1%" onClick={props.createUserFunction}>
-            {props.loading? <MiniLoading /> : "Create account"}
+          <Button
+            mode="imp"
+            width="47.1%"
+            onClick={props.loading ? () => {} : props.createUserFunction}
+          >
+            {props.loading ? <MiniLoading /> : "Create account"}
           </Button>
           <Button
             width="47.1%"

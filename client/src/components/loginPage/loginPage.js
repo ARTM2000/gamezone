@@ -26,11 +26,27 @@ const loginPage = (props) => {
           onChange={props.setPassFunction}
           error={props.errors.pass}
         />
+        {props.serverErrors.length > 0
+          ? props.serverErrors.map((el, index) => (
+              <p key={index} className={StyleSheet.error}>
+                {el}
+              </p>
+            ))
+          : null}
         <div className={StyleSheet.controller}>
-          <Button mode="imp" width="47.1%" onClick={props.userLoginFunction}>
+          <Button
+            mode="imp"
+            width="47.1%"
+            onClick={props.loading ? () => {} : props.userLoginFunction}
+          >
             {props.loading ? <MiniLoading /> : "Sign in"}
           </Button>
-          <Button width="47.1%" onClick={() => props.changeModeFunction("newUser")}>Sign up</Button>
+          <Button
+            width="47.1%"
+            onClick={() => props.changeModeFunction("newUser")}
+          >
+            Sign up
+          </Button>
         </div>
       </div>
     </Wrapper>
